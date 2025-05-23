@@ -1,10 +1,14 @@
 const fastify = require('fastify');
+const db = require('./plugin/database');
+const route = require('./route/tempTestRoute');
 
 const build = (opts = {}) => {
   const app = fastify(opts);
-  app.get('/', (_request, reply) => {
-    reply.code(200).send({ hello: 'world' });
-  });
+  // register plugins
+  app.register(db);
+
+  app.register(route, { prefix: 'api/v1/test' });
+
   return app;
 };
 
