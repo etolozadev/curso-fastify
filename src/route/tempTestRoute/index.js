@@ -1,19 +1,26 @@
+const tempService = require("../../service/temp.service");
+const { postRequestBody, getResponseBody } = require("./temp.schema");
+
 const route = async (fastify) => {
-  fastify.get('/', async (request, reply) => {
-    const data = await fastify.db.query('SELECT * FROM testTable');
+  const {getAll, save} = tempService(fastify);
+  fastify.get('/', {schema: {getResponseBody}} , async (request, reply) => {
+    const allTest = await getAll();
     console.log('asdas');
-    reply.code(200).send(data);
+    reply.code(200).send({
+      temps: allTest
+    });
   });
 
-  fastify.post('/', async (request, reply) => {
+  fastify.post('/', {schema: {
+    body: postRequestBody
+  }}, async (request, reply) => {
     fastify.log.info(`body: ${JSON.stringify(request.body)}`);
     const title = request.body.title;
-    const { id, title: titleDb } = await fastify.db.one(
-      'INSERT INTO testTable (title) VALUES ($1) RETURNING id, title',
-      [title],
-    );
+    const response = await save(title);
+    fastify.log.info(`response: ${response}`);
+    console.log('id: ', response.id)
 
-    reply.code(201).send({ id: id, title: titleDb });
+    reply.code(201).send({  title: title });
   });
 };
 

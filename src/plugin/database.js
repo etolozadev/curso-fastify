@@ -3,7 +3,7 @@ const pgPromise = require('pg-promise')();
 const applyMigration = require('./helper/migration');
 const config = require('../config');
 
-const db = async (fastify, options) => {
+const db = async (fastify, _options) => {
   const dbConnection = pgPromise(config.database_uri);
 
   fastify.decorate('db', dbConnection);

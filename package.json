@@ -3,17 +3,23 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "start-prod": "node server.js",
     "start": "nodemon server.js",
-    "lint": "eslint . --fix",
-    "test:watch": "jest --watchAll"
+    "test": "CI=true jest --coverage --runInBand --detectOpenHandles",
+    "test:watch": "jest --watchAll --detectOpenHandles --runInBand",
+    "lint:fix": "eslint '**/*.js' --fix",
+    "lint": "eslint '**/*.js'",
+    "format": "prettier --write '**/*.js'"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "db-migrate": "^0.11.14",
     "db-migrate-pg": "^1.5.2",
+    "dotenv": "^16.5.0",
     "fastify": "^5.3.3",
     "fastify-plugin": "^5.0.1",
     "nodemon": "^3.1.10",
